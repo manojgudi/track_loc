@@ -1,11 +1,11 @@
 module TrackLoc where
 
+import Control.Monad
 import Data.String.Utils (split)
 import HSH (run)
-import qualified Data.Map as M
 
 -- {"commit1" : 12, "commit2" : 47 ..}
-type LOCperCommit = M.Map String Int
+type LOCperCommit = (String, Int)
 
 {-
  - Takes a line of git log, retains the commit hash, discards else
@@ -38,9 +38,9 @@ countLines completeFilePath = do
 {-
  - git checkout each commit and find number of lines of all files with type fileType
  - -}
-myFold :: FilePath -> String -> LOCperCommit -> [String] -> IO LOCperCommit
-myFold repoPath fileType dict []     = return dict
-myFold repoPath fileType dict (x:xs) = do
+myFold :: FilePath -> String -> [String] -> IO [LOCperCommit]
+myFold repoPath fileType []     = return []
+myFold repoPath fileType (x:xs) = do
     status     <- run $ "git -C " ++ repoPath ++ " checkout " ++ x :: IO String
     allFiles   <- findFiles repoPath fileType
 
@@ -48,13 +48,14 @@ myFold repoPath fileType dict (x:xs) = do
     strLOC     <- mapM countLines allFiles
 
 -- sum strLOC is 0 if there are no files of type fileType in that commit
-    val        <- myFold repoPath fileType  (M.insert x (sum strLOC) dict) xs
+    val        <- liftM ([(x, (sum strLOC))] ++ )  (myFold repoPath fileType xs)
     return val
 
 {-
+ - For testing functions
 main :: IO ()
 main = do
-    allCommits <- getAllCommits "~/scripts/supa"
-    out <- myFold "~/scripts/supa" "py" (M.insert "" 0 M.empty) allCommits
-    putStrLn $ M.showTree out
+    allCommits <- getAllCommits "~/scripts/myRepo"
+    out <- myFold "~/scripts/myRepo" "py" allCommits
+    print out
 -}
