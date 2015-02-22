@@ -1,3 +1,5 @@
+module TrackLoc where
+
 import Data.String.Utils (split)
 import HSH (run)
 import qualified Data.Map as M
@@ -28,7 +30,7 @@ findFiles repoPath fileType = do
 {-
 countLines counts lines in that file
 -}
-countLines FilePath -> IO Int
+countLines :: FilePath -> IO Int
 countLines completeFilePath = do
     a <- run $ "cat " ++ completeFilePath ++ " | wc -l" :: IO String
     return  (read a :: Int)
@@ -49,9 +51,10 @@ myFold repoPath fileType dict (x:xs) = do
     val        <- myFold repoPath fileType  (M.insert x (sum strLOC) dict) xs
     return val
 
-
+{-
 main :: IO ()
 main = do
-    allCommits <- getAllCommits "~/scripts/myRepo"
-    out <- myFold "~/scripts/myRepo" "py" (M.insert "" 0 M.empty) allCommits
+    allCommits <- getAllCommits "~/scripts/supa"
+    out <- myFold "~/scripts/supa" "py" (M.insert "" 0 M.empty) allCommits
     putStrLn $ M.showTree out
+-}
