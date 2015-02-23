@@ -25,5 +25,5 @@ main = do
     revertStatus <- revertRepoHead repoPath branchHEAD
 
     -- Plot
-    plot X11 $ Data2D [Title "Sample Data"] [] [(toEnum x, snd y) | (x,y) <- zip [1..(length commitsLOC)] commitsLOC]
+    plot X11 $ Data2D [Title "Commits vs LOCs"] [] [(toEnum x, snd y) | (x,y) <- zip [1..(length commitsLOC)] commitsLOC]
 
