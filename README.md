@@ -15,10 +15,11 @@ $ cabal install
 ```
 
 ## Using it
-After it has built successfully, the binary will be available in ./dist/build/track-loc/
+After it has built successfully, the binary will be available in ./cabal-sandbox/bin/
 
 *Usage*
 
 ```sh
+## To crawl for python (*.py) files
 $ ./track-loc  /path/to/my/repository/   py
 ```
