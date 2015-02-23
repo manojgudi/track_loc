@@ -51,6 +51,12 @@ myFold repoPath fileType (x:xs) = do
     val        <- liftM ([(x, (sum strLOC))] ++ )  (myFold repoPath fileType xs)
     return val
 
+-- get the Branch Head of the repository
+findBranchHead :: FilePath -> IO String
+findBranchHead repoPath = do
+    branchHEAD <- run $ "git -C " ++ repoPath ++ "  rev-parse --abbrev-ref HEAD "
+    return branchHead
+
 {-
  - For testing functions
 main :: IO ()

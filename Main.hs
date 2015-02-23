@@ -9,8 +9,18 @@ import qualified Data.Map as M
 import Graphics.EasyPlot
 import TrackLoc
 
-main = do
-    allCommits <- getAllCommits "~/scripts/myRepo"
-    commitsLOC <- liftM reverse $ myFold "~/scripts/myRepo" "py" allCommits
+-- Will soon be taken as command line arguments
+repoPath = "~/scripts/myRepo"
+fileType = "py"
 
-    plot X11 $ Data2D [Title "Sample Data"] [] [(toEnum x, snd y) | (x,y) <- zip [1..(length commitsLOC)] commitsLOC] 
+main = do
+    -- get Branch Head
+    branchHEAD   <- findBranchHead repoPath
+
+    allCommits   <- getAllCommits repoPath
+    commitsLOC   <- liftM reverse $ myFold repoPath fileType allCommits
+
+    revertStatus <- revertRepositoryHead repoPath
+
+    plot X11 $ Data2D [Title "Sample Data"] [] [(toEnum x, snd y) | (x,y) <- zip [1..(length commitsLOC)] commitsLOC]
+
