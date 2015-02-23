@@ -55,7 +55,14 @@ myFold repoPath fileType (x:xs) = do
 findBranchHead :: FilePath -> IO String
 findBranchHead repoPath = do
     branchHEAD <- run $ "git -C " ++ repoPath ++ "  rev-parse --abbrev-ref HEAD "
-    return branchHead
+    return branchHEAD
+
+-- revertRepoHead
+revertRepoHead :: FilePath -> String -> IO String
+revertRepoHead repoPath branchHEAD = do
+    revertStatus <- run $ "git -C " ++ repoPath ++ " checkout " ++ branchHEAD :: IO String
+    return revertStatus
+
 
 {-
  - For testing functions

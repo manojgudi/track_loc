@@ -10,17 +10,19 @@ import Graphics.EasyPlot
 import TrackLoc
 
 -- Will soon be taken as command line arguments
-repoPath = "~/scripts/myRepo"
+repoPath = "~/myRepoPath/"
 fileType = "py"
 
 main = do
-    -- get Branch Head
+    -- get Branch Head (original state)
     branchHEAD   <- findBranchHead repoPath
 
     allCommits   <- getAllCommits repoPath
     commitsLOC   <- liftM reverse $ myFold repoPath fileType allCommits
 
-    revertStatus <- revertRepositoryHead repoPath
+    -- revert the repository to original state
+    revertStatus <- revertRepoHead repoPath branchHEAD
 
+    -- Plot
     plot X11 $ Data2D [Title "Sample Data"] [] [(toEnum x, snd y) | (x,y) <- zip [1..(length commitsLOC)] commitsLOC]
 
