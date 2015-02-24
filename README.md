@@ -6,6 +6,7 @@ A small haskell scrpit which tracks progress of total lines of code and plot lik
 ![Example of hs fileType](img/example_hs.png)
 
 Requirements:
+
 1. git version 2.0+ <br>
 2. Tested with ghc 7.6.3
 
